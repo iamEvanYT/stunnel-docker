@@ -2,10 +2,9 @@ FROM alpine:3.19
 
 RUN apk add --no-cache stunnel openssl
 
-# Create stunnel user and directories
-RUN addgroup -g 1000 stunnel && \
-    adduser -u 1000 -G stunnel -s /bin/sh -D stunnel && \
-    mkdir -p /etc/stunnel /var/run/stunnel && \
+# Create directories and fix permissions
+# (stunnel package already creates stunnel user)
+RUN mkdir -p /etc/stunnel /var/run/stunnel && \
     chown -R stunnel:stunnel /etc/stunnel /var/run/stunnel
 
 # Copy entrypoint script
