@@ -19,7 +19,8 @@ ENV STUNNEL_CERT=/etc/stunnel/stunnel.pem
 
 EXPOSE 11194
 
-USER stunnel
+# Note: Running as root to allow reading mounted certs with various permissions
+# Stunnel drops privileges internally after loading the cert
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["stunnel", "/etc/stunnel/stunnel.conf"]
