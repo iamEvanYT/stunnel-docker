@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  stunnel:
+    build: .
+    container_name: stunnel
+    restart: unless-stopped
+    environment:
+      # Client mode (yes = connect to remote server, no = listen for connections)
+      - STUNNEL_CLIENT=yes
+      
+      # Local address to listen on
+      - STUNNEL_ACCEPT=0.0.0.0:11194
+      
+      # Remote host:port to tunnel to
+      - STUNNEL_CONNECT=your-vpn-server.com:443
+      
+      # Path to certificate (optional for client mode if not verifying)
+      - STUNNEL_CERT=/etc/stunnel/stunnel.pem
+      
+      # Optional: verify server certificate (1 = verify, 0 = no verify)
+      # - STUNNEL_VERIFY=0
+      
+      # Optional: CA file for verification
+      # - STUNNEL_CAFILE=/etc/stunnel/ca.crt
+      
+      # Optional: check hostname matches certificate
+      # - STUNNEL_CHECK_HOST=your-vpn-server.com
+    ports:
+      - "11194:11194"
+    volumes:
+      # Mount your certificates if needed
+      - ./certs:/etc/stunnel/certs:ro
+    networks:
+      - stunnel-net
+
+networks:
+  stunnel-net:
+    driver: bridge
