@@ -10,8 +10,12 @@ pid = /var/run/stunnel/stunnel.pid
 client = ${STUNNEL_CLIENT}
 accept = ${STUNNEL_ACCEPT}
 connect = ${STUNNEL_CONNECT}
-cert = ${STUNNEL_CERT}
 EOF
+
+# Add cert only if file exists (client mode doesn't need it)
+if [ -f "${STUNNEL_CERT}" ]; then
+    echo "cert = ${STUNNEL_CERT}" >> /etc/stunnel/stunnel.conf
+fi
 
 # Optional: add verify settings if provided
 if [ -n "$STUNNEL_VERIFY" ]; then
